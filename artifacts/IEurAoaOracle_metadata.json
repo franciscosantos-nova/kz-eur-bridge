@@ -1,14 +1,12 @@
 {
 	"compiler": {
-		"version": "0.8.38+commit.1835d247"
+		"version": "0.8.34+commit.80d5c536"
 	},
 	"language": "Solidity",
 	"output": {
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "view",
-				"type": "function",
 				"name": "latestRate",
 				"outputs": [
 					{
@@ -16,7 +14,9 @@
 						"name": "",
 						"type": "uint256"
 					}
-				]
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -31,43 +31,36 @@
 		}
 	},
 	"settings": {
-		"remappings": [
-			"@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-			"erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
-			"forge-std/=lib/forge-std/src/",
-			"halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
-			"openzeppelin-contracts/=lib/openzeppelin-contracts/",
-			"lib/openzeppelin-contracts/:forge-std/=lib/openzeppelin-contracts/lib/forge-std/src/"
-		],
-		"optimizer": {
-			"enabled": false,
-			"runs": 200
-		},
-		"metadata": {
-			"bytecodeHash": "ipfs"
-		},
 		"compilationTarget": {
 			"src/EuroVault.sol": "IEurAoaOracle"
 		},
 		"evmVersion": "osaka",
-		"libraries": {}
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
 	},
 	"sources": {
-		"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
 			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
+			"license": "MIT",
 			"urls": [
 				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
 				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
-			],
-			"license": "MIT"
+			]
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0x6fc1772542872a2a1408d3590430ee89c8fdfa2cf47136d69991bdfd270212b7",
+			"keccak256": "0x5edf830b02e7132bb0097bb35cbe2f787c6ec0c658112ba0ea371587042c00cd",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://107864d28d3e2680bbd653a278378c3d779ec14ebc4a7174cb7dabc262d7397d",
-				"dweb:/ipfs/QmccdGMPNoGmB3waPJVjv8Y7nMCLJd5AvUbSywAdg4eAdP"
-			],
-			"license": "MIT"
+				"bzz-raw://388db9751988ab6023672af6c526489f52482b31cc39cb2119fa2afeda071019",
+				"dweb:/ipfs/QmeuJfqLULuLiZaVdf6FFBXVo9AfLTgYEo5kzKeHaLBL5W"
+			]
 		}
 	},
 	"version": 1

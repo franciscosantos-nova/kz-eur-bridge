@@ -25,6 +25,8 @@ contract EuroVault {
         spreadBps = 100; // 1%
     }
 
+    // ---------- Liquidez ----------
+
     function depositLiquidity(uint256 amount) public {
         require(msg.sender == operator, "Not authorized");
         require(eurc.transferFrom(msg.sender, address(this), amount), "Transfer failed");
@@ -42,15 +44,24 @@ contract EuroVault {
         return eurc.balanceOf(address(this)) - totalLiabilities;
     }
 
-    function creditFromKwanza(uint256 userId, uint256 aoaCents, bytes32 ref) public {
+    // ---------- Cotação ----------
+
+    function quote(uint256 aoaCents) public view returns (uint256 gross, uint256 fee, uint256 net) {
+        uint256 rate = oracle.latestRate();
+        gross = aoaCents * 1e12 / rate;
+        fee = gross * spreadBps / 10000;
+        net = gross - fee;
+    }
+
+    // ---------- Operações do cliente ----------
+
+    function creditFromKwanza(uint256 userId, uint256 aoaCents, uint256 minNet, bytes32 ref) public {
         require(msg.sender == operator, "Not authorized");
         _useRef(ref);
 
-        uint256 rate = oracle.latestRate();
-        uint256 gross = aoaCents * 1e12 / rate;
-        uint256 fee = gross * spreadBps / 10000;
-        uint256 net = gross - fee;
+        (, uint256 fee, uint256 net) = quote(aoaCents);
 
+        require(net >= minNet, "Slippage");
         require(availableLiquidity() >= net, "Insufficient liquidity");
 
         balanceOf[userId] += net;
@@ -69,11 +80,15 @@ contract EuroVault {
         require(eurc.transfer(to, amount), "Transfer failed");
     }
 
+    // ---------- Administração ----------
+
     function setSpread(uint256 newSpreadBps) public {
         require(msg.sender == operator, "Not authorized");
         require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
         spreadBps = newSpreadBps;
     }
+
+    // ---------- Internas ----------
 
     function _useRef(bytes32 ref) internal {
         require(ref != bytes32(0), "Invalid ref");
