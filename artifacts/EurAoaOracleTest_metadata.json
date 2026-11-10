@@ -601,6 +601,12 @@
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_RevertWhen_DropTooHigh"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_RevertWhen_InitialRateIsZero"
 			},
 			{
@@ -608,6 +614,12 @@
 				"stateMutability": "nonpayable",
 				"type": "function",
 				"name": "test_RevertWhen_RateIsStale"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_UpdateDownwards"
 			},
 			{
 				"inputs": [],
@@ -722,7 +734,12 @@
 	},
 	"settings": {
 		"remappings": [
-			"forge-std/=lib/forge-std/src/"
+			"@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+			"erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+			"forge-std/=lib/forge-std/src/",
+			"halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+			"openzeppelin-contracts/=lib/openzeppelin-contracts/",
+			"lib/openzeppelin-contracts/:forge-std/=lib/openzeppelin-contracts/lib/forge-std/src/"
 		],
 		"optimizer": {
 			"enabled": false,
@@ -899,18 +916,18 @@
 			"license": "MIT OR Apache-2.0"
 		},
 		"src/EurAoaOracle.sol": {
-			"keccak256": "0x007148c708432e323e334043ace3886507f9d1d6daa7fb824a8af745566ee5c1",
+			"keccak256": "0xa3a3f457b67e2a36272b2448ab1a43277e993027650fd9010e2dece01ace877d",
 			"urls": [
-				"bzz-raw://26b0e728f180602c8238f0ae838c15cb5d8e1b242afc7cda1eeb8b646f6915cd",
-				"dweb:/ipfs/QmbHRdbayaSE6vApwkxQQQt2zRyZ78gYNC3gtkfoZf6AtB"
+				"bzz-raw://77db509f4174f3de4ca08e4c2ab809a72f76f64a2d99e019dd5aa945782da370",
+				"dweb:/ipfs/QmVWZqBTe3V81a9BhyhCn6zt2HPPzPzuuVPNjoJX3UpnKa"
 			],
 			"license": "MIT"
 		},
 		"test/EurAoaOracle.t.sol": {
-			"keccak256": "0x96c20123992d71a87507cb93af8231ebb12442b6299eb3b952970cc572aac6ad",
+			"keccak256": "0x21d627c020daf9b22b949cedebe213b7d61f07944478b88924e7a812a43bd345",
 			"urls": [
-				"bzz-raw://8525b28395bfce5ed49c28d8cb98bc816e556102d0b30b2b756824e11ac61357",
-				"dweb:/ipfs/QmcYt1jrahKfuYBaP4DatXipE3MoVdzMj7qypk2DC57gj4"
+				"bzz-raw://b3aa99189b919b16c3b977cb98f07ed982c79bdbe00ab26d95f79f7b5f83b73d",
+				"dweb:/ipfs/QmU2FmUE8PmjTcqbKwXpdnJSGjXVv5shwfGJ9MWh4zXC8c"
 			],
 			"license": "MIT"
 		}
