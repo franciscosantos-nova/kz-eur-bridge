@@ -13,11 +13,15 @@ contract EuroVault {
     IEurAoaOracle public oracle;
     IERC20 public eurc;
     uint256 public totalLiabilities;
+    uint256 public constant MAX_SPREAD_BPS = 500;
+    uint256 public spreadBps;
+    uint256 public totalFeesCollected;  
 
     constructor(address oracleAddress, address eurcAddress) {
         operator = msg.sender;
         oracle = IEurAoaOracle(oracleAddress);
         eurc = IERC20(eurcAddress);
+        spreadBps = 100;   // 1%
     }
 
     function depositLiquidity(uint256 amount) public {
@@ -30,14 +34,18 @@ contract EuroVault {
     }
 
     function creditFromKwanza(uint256 userId, uint256 aoaCents) public {
-        require(msg.sender == operator, "Not authorized");
-        uint256 rate = oracle.latestRate();
-        uint256 euros = aoaCents * 1e12 / rate;
+    require(msg.sender == operator, "Not authorized");
 
-        require(availableLiquidity() >= euros, "Insufficient liquidity");
+    uint256 rate = oracle.latestRate();
+    uint256 gross = aoaCents * 1e12 / rate;
+    uint256 fee = gross * spreadBps / 10000;
+    uint256 net = gross - fee;
 
-        balanceOf[userId] += euros;
-        totalLiabilities += euros;
+    require(availableLiquidity() >= net, "Insufficient liquidity");
+
+    balanceOf[userId] += net;
+    totalLiabilities += net;
+    totalFeesCollected += fee;
     }
 
     function payout(uint256 userId, uint256 amount, address to) public {
@@ -49,4 +57,9 @@ contract EuroVault {
 
         require(eurc.transfer(to, amount), "Transfer failed");
     }
+    function setSpread(uint256 newSpreadBps) public {
+    require(msg.sender == operator, "Not authorized");
+    require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
+    spreadBps = newSpreadBps;
+}
 }

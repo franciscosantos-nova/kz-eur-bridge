@@ -488,10 +488,10 @@
 			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0x5bc21e84dfedba384c2248f3a16bd6ce406dcbb588d7a623fad19ba994e5da31",
+			"keccak256": "0xe47397e29467811c774e6ac6db18a2bbfbe910dd050fed680a3f491d057cf1b1",
 			"urls": [
-				"bzz-raw://d3e75661bf78ada5ea5d185aa6152f1ad60251c88dd81a48cc306eecab907247",
-				"dweb:/ipfs/QmRJzEHprPzb9pUH7BwKqrnZUBLP66BsrTj5JJu5mXgpsj"
+				"bzz-raw://c8295d7c2b95840f4eef4be132941e13a5ce7b0aad93c5c8282b05ad5831434d",
+				"dweb:/ipfs/QmZLEeHrDV3p43kKXSTt65xYQUA58tSPooQxv1o7M62bkh"
 			],
 			"license": "MIT"
 		},
@@ -504,10 +504,10 @@
 			"license": "MIT"
 		},
 		"test/EuroVault.t.sol": {
-			"keccak256": "0x2610796faff99f33c832a634e23b4c924d7d1a3d0842be7b7cfaa1dc9736e765",
+			"keccak256": "0xfde1010625506b8a2207ce2cc6a2daa1915caa619bdd56c863a4588a0941a6e2",
 			"urls": [
-				"bzz-raw://2de5b015d5893479bb219926e2bc22c14d99f770df468f6fb73f1d312b0a3400",
-				"dweb:/ipfs/QmTuSMb49y8Vjxr86SdPRNwGjNLoq8mrT1jM6qcY7Xcn6Z"
+				"bzz-raw://ad2a34d58f9fbb743db427f8f13db742b3f0c89d4c7ab307fbfba517e27a497b",
+				"dweb:/ipfs/QmaYAuuRVbGiK9bKDvKJRuyZoPJd6mG167Yu1SGW8hSQ8f"
 			],
 			"license": "MIT"
 		}

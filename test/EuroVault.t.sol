@@ -18,7 +18,8 @@ contract EuroVaultTest is Test {
     uint256 constant LIQUIDITY = 500e6;     // 500 €
     uint256 constant USER = 1;
     uint256 constant AOA_50K = 5000000;     // 50.000,00 kz
-    uint256 constant EUR_50K = 46926325;    // 46,926325 €
+    uint256 constant NET_50K = 46457062;    // o que o cliente recebe
+    uint256 constant FEE_50K = 469263;      // a margem de 1%    // 46,926325 €
 
     function setUp() public {
         oracle = new EurAoaOracle(RATE);
@@ -31,22 +32,22 @@ contract EuroVaultTest is Test {
     }
 
     function test_CreditFromKwanza() public {
-        vault.creditFromKwanza(USER, AOA_50K);
+    vault.creditFromKwanza(USER, AOA_50K);
 
-        assertEq(vault.balanceOf(USER), EUR_50K);
-        assertEq(vault.totalLiabilities(), EUR_50K);
-        assertEq(vault.availableLiquidity(), LIQUIDITY - EUR_50K);
+    assertEq(vault.balanceOf(USER), NET_50K);
+    assertEq(vault.totalLiabilities(), NET_50K);
+    assertEq(vault.totalFeesCollected(), FEE_50K);
+    assertEq(vault.availableLiquidity(), LIQUIDITY - NET_50K);
     }
 
     function test_PayoutToRestaurant() public {
-        vault.creditFromKwanza(USER, AOA_50K);
-        vault.payout(USER, 20e6, restaurant);
+    vault.creditFromKwanza(USER, AOA_50K);
+    vault.payout(USER, 20e6, restaurant);
 
-        assertEq(eurc.balanceOf(restaurant), 20e6);
-        assertEq(vault.balanceOf(USER), EUR_50K - 20e6);
-        assertEq(vault.totalLiabilities(), EUR_50K - 20e6);
+    assertEq(eurc.balanceOf(restaurant), 20e6);
+    assertEq(vault.balanceOf(USER), NET_50K - 20e6);
+    assertEq(vault.totalLiabilities(), NET_50K - 20e6);
     }
-
     function test_RevertWhen_InsufficientLiquidity() public {
         vm.expectRevert("Insufficient liquidity");
         vault.creditFromKwanza(USER, 1000000000);
@@ -76,7 +77,7 @@ contract EuroVaultTest is Test {
 
     // ativos >= passivos
     assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
-}
+    }
     function testFuzz_CreditThenPayout(uint256 aoaCents, uint256 spend) public {
     aoaCents = bound(aoaCents, 1, 50_000_000);
     vault.creditFromKwanza(USER, aoaCents);
@@ -89,5 +90,23 @@ contract EuroVaultTest is Test {
     assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities()); // TODO 3: solvente
     assertEq(eurc.balanceOf(restaurant), spend);                        // TODO 3: restaurante
     assertEq(vault.balanceOf(USER), balanceBefore - spend);             // TODO 3: cliente
-}
+    }   
+    function test_SetSpreadChangesWhatUserReceives() public {
+    vault.setSpread(0);
+    vault.creditFromKwanza(USER, AOA_50K);
+
+    assertEq(vault.balanceOf(USER), NET_50K + FEE_50K);   // sem margem, recebe o bruto
+    assertEq(vault.totalFeesCollected(), 0);
+    }
+
+    function test_RevertWhen_SpreadTooHigh() public {
+    vm.expectRevert("Spread too high");
+    vault.setSpread(501);
+    }
+
+    function test_RevertWhen_AttackerSetsSpread() public {
+    vm.prank(attacker);
+    vm.expectRevert("Not authorized");
+    vault.setSpread(500);
+    }
 }
