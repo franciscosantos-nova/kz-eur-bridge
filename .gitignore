@@ -21,3 +21,4 @@ docs/
 .deps/
 artifacts/
 remix.config.json
+.env
