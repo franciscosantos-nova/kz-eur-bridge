@@ -33,6 +33,8 @@ contract EurAoaOracle {
     }
 
     function latestRate() public view returns (uint256) {
+        // O prazo é de dias; uma manipulação de segundos pelos validadores é irrelevante.
+        //forge-lint: disable-next-line(block-timestamp)
         require(block.timestamp <= updatedAt + maxAge, "Stale rate");
         return rate;
     }

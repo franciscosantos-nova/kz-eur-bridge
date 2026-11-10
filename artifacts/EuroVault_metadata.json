@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.34+commit.80d5c536"
+		"version": "0.8.38+commit.1835d247"
 	},
 	"language": "Solidity",
 	"output": {
@@ -34,8 +34,8 @@
 						"type": "uint256"
 					}
 				],
-				"name": "InsufficientBalance",
-				"type": "error"
+				"type": "error",
+				"name": "InsufficientBalance"
 			},
 			{
 				"inputs": [
@@ -50,23 +50,23 @@
 						"type": "uint256"
 					}
 				],
-				"name": "InsufficientLiquidity",
-				"type": "error"
+				"type": "error",
+				"name": "InsufficientLiquidity"
 			},
 			{
 				"inputs": [],
-				"name": "InvalidAddress",
-				"type": "error"
+				"type": "error",
+				"name": "InvalidAddress"
 			},
 			{
 				"inputs": [],
-				"name": "InvalidRef",
-				"type": "error"
+				"type": "error",
+				"name": "InvalidRef"
 			},
 			{
 				"inputs": [],
-				"name": "NotAuthorized",
-				"type": "error"
+				"type": "error",
+				"name": "NotAuthorized"
 			},
 			{
 				"inputs": [
@@ -76,13 +76,13 @@
 						"type": "bytes32"
 					}
 				],
-				"name": "RefAlreadyProcessed",
-				"type": "error"
+				"type": "error",
+				"name": "RefAlreadyProcessed"
 			},
 			{
 				"inputs": [],
-				"name": "SameUser",
-				"type": "error"
+				"type": "error",
+				"name": "SameUser"
 			},
 			{
 				"inputs": [
@@ -97,8 +97,8 @@
 						"type": "uint256"
 					}
 				],
-				"name": "Slippage",
-				"type": "error"
+				"type": "error",
+				"name": "Slippage"
 			},
 			{
 				"inputs": [
@@ -108,178 +108,180 @@
 						"type": "uint256"
 					}
 				],
-				"name": "SpreadTooHigh",
-				"type": "error"
+				"type": "error",
+				"name": "SpreadTooHigh"
 			},
 			{
 				"inputs": [],
-				"name": "TransferFailed",
-				"type": "error"
+				"type": "error",
+				"name": "TransferFailed"
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "fromUser",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": true
 					},
 					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "toUser",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": true
 					},
 					{
-						"indexed": true,
 						"internalType": "bytes32",
 						"name": "ref",
-						"type": "bytes32"
+						"type": "bytes32",
+						"indexed": true
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "InternalTransfer",
-				"type": "event"
+				"anonymous": false
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "userId",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": true
 					},
 					{
-						"indexed": true,
 						"internalType": "bytes32",
 						"name": "ref",
-						"type": "bytes32"
+						"type": "bytes32",
+						"indexed": true
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "aoaCents",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "gross",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "fee",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "net",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "KwanzaCredited",
-				"type": "event"
+				"anonymous": false
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
 						"internalType": "address",
 						"name": "from",
-						"type": "address"
+						"type": "address",
+						"indexed": true
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "LiquidityDeposited",
-				"type": "event"
+				"anonymous": false
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
 						"internalType": "address",
 						"name": "to",
-						"type": "address"
+						"type": "address",
+						"indexed": true
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "LiquidityWithdrawn",
-				"type": "event"
+				"anonymous": false
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "userId",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": true
 					},
 					{
-						"indexed": true,
 						"internalType": "bytes32",
 						"name": "ref",
-						"type": "bytes32"
+						"type": "bytes32",
+						"indexed": true
 					},
 					{
-						"indexed": true,
 						"internalType": "address",
 						"name": "to",
-						"type": "address"
+						"type": "address",
+						"indexed": true
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "amount",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "Payout",
-				"type": "event"
+				"anonymous": false
 			},
 			{
-				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "oldSpreadBps",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					},
 					{
-						"indexed": false,
 						"internalType": "uint256",
 						"name": "newSpreadBps",
-						"type": "uint256"
+						"type": "uint256",
+						"indexed": false
 					}
 				],
+				"type": "event",
 				"name": "SpreadUpdated",
-				"type": "event"
+				"anonymous": false
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "MAX_SPREAD_BPS",
 				"outputs": [
 					{
@@ -287,12 +289,12 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "availableLiquidity",
 				"outputs": [
 					{
@@ -300,9 +302,7 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -312,6 +312,8 @@
 						"type": "uint256"
 					}
 				],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "balanceOf",
 				"outputs": [
 					{
@@ -319,9 +321,7 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -346,10 +346,9 @@
 						"type": "bytes32"
 					}
 				],
-				"name": "creditFromKwanza",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "creditFromKwanza"
 			},
 			{
 				"inputs": [
@@ -359,13 +358,14 @@
 						"type": "uint256"
 					}
 				],
-				"name": "depositLiquidity",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "depositLiquidity"
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "eurc",
 				"outputs": [
 					{
@@ -373,12 +373,12 @@
 						"name": "",
 						"type": "address"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "operator",
 				"outputs": [
 					{
@@ -386,12 +386,12 @@
 						"name": "",
 						"type": "address"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "oracle",
 				"outputs": [
 					{
@@ -399,9 +399,7 @@
 						"name": "",
 						"type": "address"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -426,10 +424,9 @@
 						"type": "bytes32"
 					}
 				],
-				"name": "payout",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "payout"
 			},
 			{
 				"inputs": [
@@ -439,6 +436,8 @@
 						"type": "bytes32"
 					}
 				],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "processedRefs",
 				"outputs": [
 					{
@@ -446,9 +445,7 @@
 						"name": "",
 						"type": "bool"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -458,6 +455,8 @@
 						"type": "uint256"
 					}
 				],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "quote",
 				"outputs": [
 					{
@@ -475,9 +474,7 @@
 						"name": "net",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -487,13 +484,14 @@
 						"type": "uint256"
 					}
 				],
-				"name": "setSpread",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "setSpread"
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "spreadBps",
 				"outputs": [
 					{
@@ -501,12 +499,12 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "totalFeesCollected",
 				"outputs": [
 					{
@@ -514,12 +512,12 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
 				"name": "totalLiabilities",
 				"outputs": [
 					{
@@ -527,9 +525,7 @@
 						"name": "",
 						"type": "uint256"
 					}
-				],
-				"stateMutability": "view",
-				"type": "function"
+				]
 			},
 			{
 				"inputs": [
@@ -554,10 +550,9 @@
 						"type": "bytes32"
 					}
 				],
-				"name": "transferBetweenUsers",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "transferBetweenUsers"
 			},
 			{
 				"inputs": [
@@ -572,10 +567,9 @@
 						"type": "uint256"
 					}
 				],
-				"name": "withdrawLiquidity",
-				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
+				"type": "function",
+				"name": "withdrawLiquidity"
 			}
 		],
 		"devdoc": {
@@ -590,36 +584,43 @@
 		}
 	},
 	"settings": {
-		"compilationTarget": {
-			"src/EuroVault.sol": "EuroVault"
-		},
-		"evmVersion": "osaka",
-		"libraries": {},
-		"metadata": {
-			"bytecodeHash": "ipfs"
-		},
+		"remappings": [
+			"@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+			"erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+			"forge-std/=lib/forge-std/src/",
+			"halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+			"openzeppelin-contracts/=lib/openzeppelin-contracts/",
+			"lib/openzeppelin-contracts/:forge-std/=lib/openzeppelin-contracts/lib/forge-std/src/"
+		],
 		"optimizer": {
 			"enabled": false,
 			"runs": 200
 		},
-		"remappings": []
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"compilationTarget": {
+			"src/EuroVault.sol": "EuroVault"
+		},
+		"evmVersion": "osaka",
+		"libraries": {}
 	},
 	"sources": {
-		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+		"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": {
 			"keccak256": "0x74ed01eb66b923d0d0cfe3be84604ac04b76482a55f9dd655e1ef4d367f95bc2",
-			"license": "MIT",
 			"urls": [
 				"bzz-raw://5282825a626cfe924e504274b864a652b0023591fa66f06a067b25b51ba9b303",
 				"dweb:/ipfs/QmeCfPykghhMc81VJTrHTC7sF6CRvaA1FXVq2pJhwYp1dV"
-			]
+			],
+			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0x41f58ece7f68c13dd794561441aa42759364e99d0af01cfd2e5a5c4f4da70059",
-			"license": "MIT",
+			"keccak256": "0xb09a241f8d92ec83a937e3ad1e2c3dae7e299006a6e0d0ac49ac8938c99ef93a",
 			"urls": [
-				"bzz-raw://409a064738f669e043173f2d59f870b967c9e0f9947f9e4bcc986a2a5708527d",
-				"dweb:/ipfs/QmaDem1QBKs3FCJnrLTti4r29YRKdwR6rABRQ8qzrGApBZ"
-			]
+				"bzz-raw://80f4d3a8e4703518425a6f02eec44618a1d2570eecf45d0138594b2b3c828ed6",
+				"dweb:/ipfs/QmV5VEsUuGvcv2VRyeLE1Dto7fkKoGrbvKxwYE7qm3z9Se"
+			],
+			"license": "MIT"
 		}
 	},
 	"version": 1

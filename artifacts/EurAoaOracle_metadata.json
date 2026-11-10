@@ -107,7 +107,12 @@
 	},
 	"settings": {
 		"remappings": [
-			"forge-std/=lib/forge-std/src/"
+			"@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+			"erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+			"forge-std/=lib/forge-std/src/",
+			"halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+			"openzeppelin-contracts/=lib/openzeppelin-contracts/",
+			"lib/openzeppelin-contracts/:forge-std/=lib/openzeppelin-contracts/lib/forge-std/src/"
 		],
 		"optimizer": {
 			"enabled": false,
@@ -124,10 +129,10 @@
 	},
 	"sources": {
 		"src/EurAoaOracle.sol": {
-			"keccak256": "0xa3a3f457b67e2a36272b2448ab1a43277e993027650fd9010e2dece01ace877d",
+			"keccak256": "0xa63564c6f83f1edb1a2da1a9cbdc17f7ae052accb2e7c64d20601c3d697f7015",
 			"urls": [
-				"bzz-raw://77db509f4174f3de4ca08e4c2ab809a72f76f64a2d99e019dd5aa945782da370",
-				"dweb:/ipfs/QmVWZqBTe3V81a9BhyhCn6zt2HPPzPzuuVPNjoJX3UpnKa"
+				"bzz-raw://3f5879939f335e171fbdca0cb34d385c2fab1ec069f0bdab0fa19ff8433656ac",
+				"dweb:/ipfs/QmX2w2MnRT3eFbsyPZq7HJoNXscjcoUUhWNhaYoa5gb9Sa"
 			],
 			"license": "MIT"
 		}
