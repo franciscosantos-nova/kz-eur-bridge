@@ -8,49 +8,32 @@ contract EurAoaOracle {
     uint256 public maxDeviationBps;
     uint256 public maxAge;
 
-    
-    
-
-
-
-    constructor (uint256 initialRate) {
+    constructor(uint256 initialRate) {
         require(initialRate > 0, "Rate cannot be zero");
         updater = msg.sender;
         maxDeviationBps = 500;
-        maxAge= 4 days;
+        maxAge = 4 days;
         rate = initialRate;
         updatedAt = block.timestamp;
-       
-
-
-
-
     }
-
 
     function updateRate(uint256 newRate) public {
         require(msg.sender == updater, "Not authorized");
         uint256 diff;
         if (newRate > rate) {
-            diff= newRate - rate;
+            diff = newRate - rate;
         } else {
-            diff= rate - newRate;
+            diff = rate - newRate;
         }
 
-        require(diff *10000 <= rate * maxDeviationBps, "Deviation too high");
-        
-        rate= newRate;
-        updatedAt = block.timestamp;
+        require(diff * 10000 <= rate * maxDeviationBps, "Deviation too high");
 
+        rate = newRate;
+        updatedAt = block.timestamp;
     }
 
     function latestRate() public view returns (uint256) {
-
         require(block.timestamp <= updatedAt + maxAge, "Stale rate");
         return rate;
     }
-
-
-        
-    
 }

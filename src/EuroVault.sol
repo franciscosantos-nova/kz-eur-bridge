@@ -30,6 +30,14 @@ contract EuroVault {
         require(eurc.transferFrom(msg.sender, address(this), amount), "Transfer failed");
     }
 
+    function withdrawLiquidity(address to, uint256 amount) public {
+        require(msg.sender == operator, "Not authorized");
+        require(to != address(0), "Invalid address");
+        require(amount <= availableLiquidity(), "Insufficient liquidity");
+
+        require(eurc.transfer(to, amount), "Transfer failed");
+    }
+
     function availableLiquidity() public view returns (uint256) {
         return eurc.balanceOf(address(this)) - totalLiabilities;
     }

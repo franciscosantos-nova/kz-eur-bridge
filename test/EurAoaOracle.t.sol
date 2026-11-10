@@ -44,14 +44,15 @@ contract EurAoaOracleTest is Test {
         vm.expectRevert("Rate cannot be zero");
         new EurAoaOracle(0);
     }
+
     function test_UpdateDownwards() public {
-    uint256 newRate = RATE * 97 / 100;   // kwanza valoriza 3%
-    oracle.updateRate(newRate);
-    assertEq(oracle.latestRate(), newRate);
-}
+        uint256 newRate = RATE * 97 / 100; // kwanza valoriza 3%
+        oracle.updateRate(newRate);
+        assertEq(oracle.latestRate(), newRate);
+    }
 
     function test_RevertWhen_DropTooHigh() public {
-    vm.expectRevert("Deviation too high");
-    oracle.updateRate(RATE * 90 / 100);  // desce 10%
-}
+        vm.expectRevert("Deviation too high");
+        oracle.updateRate(RATE * 90 / 100); // desce 10%
+    }
 }

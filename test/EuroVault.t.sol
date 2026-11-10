@@ -13,6 +13,7 @@ contract EuroVaultTest is Test {
 
     address restaurant = makeAddr("restaurant");
     address attacker = makeAddr("attacker");
+    address treasury = makeAddr("treasury");
 
     uint256 constant RATE = 106550000000;
     uint256 constant LIQUIDITY = 500e6;
@@ -103,7 +104,7 @@ contract EuroVaultTest is Test {
         vm.expectRevert("Ref already processed");
         vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
 
-        assertEq(vault.balanceOf(USER), NET_50K);   // recebeu só uma vez
+        assertEq(vault.balanceOf(USER), NET_50K); // recebeu só uma vez
     }
 
     function test_RevertWhen_PayoutRefReused() public {
@@ -152,5 +153,40 @@ contract EuroVaultTest is Test {
         assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
         assertEq(eurc.balanceOf(restaurant), spend);
         assertEq(vault.balanceOf(USER), balanceBefore - spend);
+    }
+    // ---------- Retirar liquidez ----------
+
+    function test_WithdrawProfits() public {
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+        uint256 available = vault.availableLiquidity();
+
+        vault.withdrawLiquidity(treasury, available);
+
+        assertEq(eurc.balanceOf(treasury), available);
+        assertEq(eurc.balanceOf(address(vault)), vault.totalLiabilities()); // ficou só o dos clientes
+    }
+
+    function test_RevertWhen_WithdrawTouchesCustomerFunds() public {
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+        uint256 available = vault.availableLiquidity();
+
+        vm.expectRevert("Insufficient liquidity");
+        vault.withdrawLiquidity(treasury, available + 1); // 1 unidade a mais já é do cliente
+    }
+
+    function test_RevertWhen_AttackerWithdraws() public {
+        vm.prank(attacker);
+        vm.expectRevert("Not authorized");
+        vault.withdrawLiquidity(attacker, 1);
+    }
+
+    function testFuzz_WithdrawNeverBreaksSolvency(uint256 aoaCents, uint256 amount) public {
+        aoaCents = bound(aoaCents, 1, 50_000_000);
+        vault.creditFromKwanza(USER, aoaCents, "FUZZ-CREDIT");
+
+        amount = bound(amount, 0, vault.availableLiquidity());
+        vault.withdrawLiquidity(treasury, amount);
+
+        assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
     }
 }

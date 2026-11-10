@@ -609,6 +609,23 @@
 				"name": "testFuzz_CreditThenPayout"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "aoaCents",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "testFuzz_WithdrawNeverBreaksSolvency"
+			},
+			{
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
@@ -636,6 +653,18 @@
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_RevertWhen_AttackerWithdraws"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_RevertWhen_CreditRefReused"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_RevertWhen_InsufficientLiquidity"
 			},
 			{
@@ -654,13 +683,43 @@
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_RevertWhen_PayoutRefReused"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_RevertWhen_RefIsEmpty"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_RevertWhen_SpreadTooHigh"
 			},
 			{
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_RevertWhen_WithdrawTouchesCustomerFunds"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_RevertedCreditDoesNotBurnRef"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_SetSpreadChangesWhatUserReceives"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_WithdrawProfits"
 			}
 		],
 		"devdoc": {
@@ -1007,10 +1066,10 @@
 			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0xe47397e29467811c774e6ac6db18a2bbfbe910dd050fed680a3f491d057cf1b1",
+			"keccak256": "0x6cb4758cab5d2cdf5ce888f6eadae0718a4b1fa29bdeab60632d3a149adc9674",
 			"urls": [
-				"bzz-raw://c8295d7c2b95840f4eef4be132941e13a5ce7b0aad93c5c8282b05ad5831434d",
-				"dweb:/ipfs/QmZLEeHrDV3p43kKXSTt65xYQUA58tSPooQxv1o7M62bkh"
+				"bzz-raw://efb815dbae00e519a1ee80f0e3b087b62a2a39bcecea47b70005b2c1d0d51b26",
+				"dweb:/ipfs/QmWhtrNCzNbhXYvSDLwxt7ouPR4CMS854AvNLmUpk7ypGW"
 			],
 			"license": "MIT"
 		},
@@ -1023,10 +1082,10 @@
 			"license": "MIT"
 		},
 		"test/EuroVault.t.sol": {
-			"keccak256": "0xfde1010625506b8a2207ce2cc6a2daa1915caa619bdd56c863a4588a0941a6e2",
+			"keccak256": "0x1da4ffac83a4a55eac4e88d0991cac13e26d1cb7818a0a9a40a4e2669be31979",
 			"urls": [
-				"bzz-raw://ad2a34d58f9fbb743db427f8f13db742b3f0c89d4c7ab307fbfba517e27a497b",
-				"dweb:/ipfs/QmaYAuuRVbGiK9bKDvKJRuyZoPJd6mG167Yu1SGW8hSQ8f"
+				"bzz-raw://f90a3d1b10ecc9002d947f5bbda40e14b98ca6471382b9119d21af2361185691",
+				"dweb:/ipfs/QmdetbpfVEe5ihHuhXkqvTasLifXnGiT9t3MD3tdTJSvTL"
 			],
 			"license": "MIT"
 		}
