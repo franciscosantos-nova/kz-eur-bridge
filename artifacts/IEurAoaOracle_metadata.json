@@ -62,10 +62,10 @@
 			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0xe47397e29467811c774e6ac6db18a2bbfbe910dd050fed680a3f491d057cf1b1",
+			"keccak256": "0x46090eb7fdb1b4cad849f337d0788590bdc22b7d46fa2a30530ccdf32db789a2",
 			"urls": [
-				"bzz-raw://c8295d7c2b95840f4eef4be132941e13a5ce7b0aad93c5c8282b05ad5831434d",
-				"dweb:/ipfs/QmZLEeHrDV3p43kKXSTt65xYQUA58tSPooQxv1o7M62bkh"
+				"bzz-raw://abc484ca11f09bc34c1f3f2b33bef6c60d13f12cee2ba50e241c6cfdcba229c9",
+				"dweb:/ipfs/QmNcuQqqq1oMQBrxz2czAATgLsay67WoaRrsXtZTfxZKbE"
 			],
 			"license": "MIT"
 		}

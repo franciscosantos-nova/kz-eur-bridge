@@ -15,13 +15,14 @@ contract EuroVault {
     uint256 public totalLiabilities;
     uint256 public constant MAX_SPREAD_BPS = 500;
     uint256 public spreadBps;
-    uint256 public totalFeesCollected;  
+    uint256 public totalFeesCollected;
+    mapping(bytes32 => bool) public processedRefs;
 
     constructor(address oracleAddress, address eurcAddress) {
         operator = msg.sender;
         oracle = IEurAoaOracle(oracleAddress);
         eurc = IERC20(eurcAddress);
-        spreadBps = 100;   // 1%
+        spreadBps = 100; // 1%
     }
 
     function depositLiquidity(uint256 amount) public {
@@ -33,23 +34,25 @@ contract EuroVault {
         return eurc.balanceOf(address(this)) - totalLiabilities;
     }
 
-    function creditFromKwanza(uint256 userId, uint256 aoaCents) public {
-    require(msg.sender == operator, "Not authorized");
+    function creditFromKwanza(uint256 userId, uint256 aoaCents, bytes32 ref) public {
+        require(msg.sender == operator, "Not authorized");
+        _useRef(ref);
 
-    uint256 rate = oracle.latestRate();
-    uint256 gross = aoaCents * 1e12 / rate;
-    uint256 fee = gross * spreadBps / 10000;
-    uint256 net = gross - fee;
+        uint256 rate = oracle.latestRate();
+        uint256 gross = aoaCents * 1e12 / rate;
+        uint256 fee = gross * spreadBps / 10000;
+        uint256 net = gross - fee;
 
-    require(availableLiquidity() >= net, "Insufficient liquidity");
+        require(availableLiquidity() >= net, "Insufficient liquidity");
 
-    balanceOf[userId] += net;
-    totalLiabilities += net;
-    totalFeesCollected += fee;
+        balanceOf[userId] += net;
+        totalLiabilities += net;
+        totalFeesCollected += fee;
     }
 
-    function payout(uint256 userId, uint256 amount, address to) public {
+    function payout(uint256 userId, uint256 amount, address to, bytes32 ref) public {
         require(msg.sender == operator, "Not authorized");
+        _useRef(ref);
         require(balanceOf[userId] >= amount, "Insufficient balance");
 
         balanceOf[userId] -= amount;
@@ -57,9 +60,16 @@ contract EuroVault {
 
         require(eurc.transfer(to, amount), "Transfer failed");
     }
+
     function setSpread(uint256 newSpreadBps) public {
-    require(msg.sender == operator, "Not authorized");
-    require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
-    spreadBps = newSpreadBps;
-}
+        require(msg.sender == operator, "Not authorized");
+        require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
+        spreadBps = newSpreadBps;
+    }
+
+    function _useRef(bytes32 ref) internal {
+        require(ref != bytes32(0), "Invalid ref");
+        require(!processedRefs[ref], "Ref already processed");
+        processedRefs[ref] = true;
+    }
 }

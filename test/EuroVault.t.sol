@@ -14,12 +14,12 @@ contract EuroVaultTest is Test {
     address restaurant = makeAddr("restaurant");
     address attacker = makeAddr("attacker");
 
-    uint256 constant RATE = 106550000000;   // 1065,50 AOA/EUR
-    uint256 constant LIQUIDITY = 500e6;     // 500 €
+    uint256 constant RATE = 106550000000;
+    uint256 constant LIQUIDITY = 500e6;
     uint256 constant USER = 1;
-    uint256 constant AOA_50K = 5000000;     // 50.000,00 kz
-    uint256 constant NET_50K = 46457062;    // o que o cliente recebe
-    uint256 constant FEE_50K = 469263;      // a margem de 1%    // 46,926325 €
+    uint256 constant AOA_50K = 5000000;
+    uint256 constant NET_50K = 46457062;
+    uint256 constant FEE_50K = 469263;
 
     function setUp() public {
         oracle = new EurAoaOracle(RATE);
@@ -31,82 +31,126 @@ contract EuroVaultTest is Test {
         vault.depositLiquidity(LIQUIDITY);
     }
 
-    function test_CreditFromKwanza() public {
-    vault.creditFromKwanza(USER, AOA_50K);
+    // ---------- Crédito e pagamento ----------
 
-    assertEq(vault.balanceOf(USER), NET_50K);
-    assertEq(vault.totalLiabilities(), NET_50K);
-    assertEq(vault.totalFeesCollected(), FEE_50K);
-    assertEq(vault.availableLiquidity(), LIQUIDITY - NET_50K);
+    function test_CreditFromKwanza() public {
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+
+        assertEq(vault.balanceOf(USER), NET_50K);
+        assertEq(vault.totalLiabilities(), NET_50K);
+        assertEq(vault.totalFeesCollected(), FEE_50K);
+        assertEq(vault.availableLiquidity(), LIQUIDITY - NET_50K);
     }
 
     function test_PayoutToRestaurant() public {
-    vault.creditFromKwanza(USER, AOA_50K);
-    vault.payout(USER, 20e6, restaurant);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+        vault.payout(USER, 20e6, restaurant, "PAY-0001");
 
-    assertEq(eurc.balanceOf(restaurant), 20e6);
-    assertEq(vault.balanceOf(USER), NET_50K - 20e6);
-    assertEq(vault.totalLiabilities(), NET_50K - 20e6);
+        assertEq(eurc.balanceOf(restaurant), 20e6);
+        assertEq(vault.balanceOf(USER), NET_50K - 20e6);
+        assertEq(vault.totalLiabilities(), NET_50K - 20e6);
     }
+
     function test_RevertWhen_InsufficientLiquidity() public {
         vm.expectRevert("Insufficient liquidity");
-        vault.creditFromKwanza(USER, 1000000000);
+        vault.creditFromKwanza(USER, 1000000000, "MCX-BIG");
     }
 
     function test_RevertWhen_PayoutExceedsBalance() public {
-        vault.creditFromKwanza(USER, AOA_50K);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
         vm.expectRevert("Insufficient balance");
-        vault.payout(USER, 100e6, restaurant);
+        vault.payout(USER, 100e6, restaurant, "PAY-0001");
     }
 
     function test_RevertWhen_AttackerCredits() public {
         vm.prank(attacker);
         vm.expectRevert("Not authorized");
-        vault.creditFromKwanza(USER, AOA_50K);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
     }
 
     function test_RevertWhen_OracleIsStale() public {
         vm.warp(block.timestamp + 4 days + 1);
         vm.expectRevert("Stale rate");
-        vault.creditFromKwanza(USER, AOA_50K);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
     }
-    function testFuzz_CreditKeepsVaultSolvent(uint256 aoaCents) public {
-    aoaCents = bound(aoaCents, 1, 50_000_000);
 
-    vault.creditFromKwanza(USER, aoaCents);
+    // ---------- Margem ----------
 
-    // ativos >= passivos
-    assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
-    }
-    function testFuzz_CreditThenPayout(uint256 aoaCents, uint256 spend) public {
-    aoaCents = bound(aoaCents, 1, 50_000_000);
-    vault.creditFromKwanza(USER, aoaCents);
-
-    uint256 balanceBefore = vault.balanceOf(USER);
-    spend = bound(spend, 0, balanceBefore);                          // TODO 1
-
-    vault.payout(USER, spend, restaurant);                           // TODO 2
-
-    assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities()); // TODO 3: solvente
-    assertEq(eurc.balanceOf(restaurant), spend);                        // TODO 3: restaurante
-    assertEq(vault.balanceOf(USER), balanceBefore - spend);             // TODO 3: cliente
-    }   
     function test_SetSpreadChangesWhatUserReceives() public {
-    vault.setSpread(0);
-    vault.creditFromKwanza(USER, AOA_50K);
+        vault.setSpread(0);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
 
-    assertEq(vault.balanceOf(USER), NET_50K + FEE_50K);   // sem margem, recebe o bruto
-    assertEq(vault.totalFeesCollected(), 0);
+        assertEq(vault.balanceOf(USER), NET_50K + FEE_50K);
+        assertEq(vault.totalFeesCollected(), 0);
     }
 
     function test_RevertWhen_SpreadTooHigh() public {
-    vm.expectRevert("Spread too high");
-    vault.setSpread(501);
+        vm.expectRevert("Spread too high");
+        vault.setSpread(501);
     }
 
     function test_RevertWhen_AttackerSetsSpread() public {
-    vm.prank(attacker);
-    vm.expectRevert("Not authorized");
-    vault.setSpread(500);
+        vm.prank(attacker);
+        vm.expectRevert("Not authorized");
+        vault.setSpread(500);
+    }
+
+    // ---------- Referências únicas ----------
+
+    function test_RevertWhen_CreditRefReused() public {
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+
+        vm.expectRevert("Ref already processed");
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+
+        assertEq(vault.balanceOf(USER), NET_50K);   // recebeu só uma vez
+    }
+
+    function test_RevertWhen_PayoutRefReused() public {
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+        vault.payout(USER, 10e6, restaurant, "PAY-0001");
+
+        vm.expectRevert("Ref already processed");
+        vault.payout(USER, 10e6, restaurant, "PAY-0001");
+
+        assertEq(eurc.balanceOf(restaurant), 10e6); // pago só uma vez
+    }
+
+    function test_RevertWhen_RefIsEmpty() public {
+        vm.expectRevert("Invalid ref");
+        vault.creditFromKwanza(USER, AOA_50K, bytes32(0));
+    }
+
+    function test_RevertedCreditDoesNotBurnRef() public {
+        vm.warp(block.timestamp + 4 days + 1);
+        vm.expectRevert("Stale rate");
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+
+        // a taxa é atualizada e o backend tenta outra vez com a mesma referência
+        oracle.updateRate(RATE);
+        vault.creditFromKwanza(USER, AOA_50K, "MCX-0001");
+        assertEq(vault.balanceOf(USER), NET_50K);
+    }
+
+    // ---------- Fuzz ----------
+
+    function testFuzz_CreditKeepsVaultSolvent(uint256 aoaCents) public {
+        aoaCents = bound(aoaCents, 1, 50_000_000);
+        vault.creditFromKwanza(USER, aoaCents, "FUZZ-CREDIT");
+
+        assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
+    }
+
+    function testFuzz_CreditThenPayout(uint256 aoaCents, uint256 spend) public {
+        aoaCents = bound(aoaCents, 1, 50_000_000);
+        vault.creditFromKwanza(USER, aoaCents, "FUZZ-CREDIT");
+
+        uint256 balanceBefore = vault.balanceOf(USER);
+        spend = bound(spend, 0, balanceBefore);
+        vault.payout(USER, spend, restaurant, "FUZZ-PAY");
+
+        assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
+        assertEq(eurc.balanceOf(restaurant), spend);
+        assertEq(vault.balanceOf(USER), balanceBefore - spend);
     }
 }
