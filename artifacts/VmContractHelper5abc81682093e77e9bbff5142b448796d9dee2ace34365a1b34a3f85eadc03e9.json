@@ -1,0 +1,276 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"sepolia:11155111": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"object": "",
+			"sourceMap": "",
+			"linkReferences": {}
+		},
+		"deployedBytecode": {
+			"object": "",
+			"sourceMap": "",
+			"linkReferences": {}
+		},
+		"methodIdentifiers": {
+			"deployCode(string)": "9a8325a0",
+			"deployCode(string,bytes)": "29ce9dde",
+			"deployCode(string,bytes,bytes32)": "016155bf",
+			"deployCode(string,bytes,uint256)": "ff5d64e4",
+			"deployCode(string,bytes,uint256,bytes32)": "3aa773ea",
+			"deployCode(string,bytes32)": "17ab1d79",
+			"deployCode(string,uint256)": "0af6a701",
+			"deployCode(string,uint256,bytes32)": "002cb687",
+			"getCode(string)": "8d1cc925"
+		}
+	},
+	"abi": [
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_value",
+					"type": "uint256",
+					"internalType": "uint256"
+				},
+				{
+					"name": "_salt",
+					"type": "bytes32",
+					"internalType": "bytes32"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_args",
+					"type": "bytes",
+					"internalType": "bytes"
+				},
+				{
+					"name": "_salt",
+					"type": "bytes32",
+					"internalType": "bytes32"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_value",
+					"type": "uint256",
+					"internalType": "uint256"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_salt",
+					"type": "bytes32",
+					"internalType": "bytes32"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_args",
+					"type": "bytes",
+					"internalType": "bytes"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_args",
+					"type": "bytes",
+					"internalType": "bytes"
+				},
+				{
+					"name": "_value",
+					"type": "uint256",
+					"internalType": "uint256"
+				},
+				{
+					"name": "_salt",
+					"type": "bytes32",
+					"internalType": "bytes32"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "deployCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				},
+				{
+					"name": "_args",
+					"type": "bytes",
+					"internalType": "bytes"
+				},
+				{
+					"name": "_value",
+					"type": "uint256",
+					"internalType": "uint256"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "address",
+					"internalType": "address"
+				}
+			],
+			"stateMutability": "nonpayable"
+		},
+		{
+			"type": "function",
+			"name": "getCode",
+			"inputs": [
+				{
+					"name": "_artifact",
+					"type": "string",
+					"internalType": "string"
+				}
+			],
+			"outputs": [
+				{
+					"name": "",
+					"type": "bytes",
+					"internalType": "bytes"
+				}
+			],
+			"stateMutability": "view"
+		}
+	]
+}

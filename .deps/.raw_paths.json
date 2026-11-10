@@ -1,0 +1,7 @@
+{
+  "forge-std@1.1.2/Test.sol": ".deps/npm/forge-std@1.1.2/Test.sol",
+  "forge-std@1.1.2/Script.sol": ".deps/npm/forge-std@1.1.2/Script.sol",
+  "forge-std@1.1.2/Vm.sol": ".deps/npm/forge-std@1.1.2/Vm.sol",
+  "forge-std@1.1.2/console.sol": ".deps/npm/forge-std@1.1.2/console.sol",
+  "forge-std@1.1.2/console2.sol": ".deps/npm/forge-std@1.1.2/console2.sol"
+}

@@ -1,0 +1,136 @@
+{
+	"compiler": {
+		"version": "0.8.38+commit.1835d247"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "initialRate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
+				"name": "latestRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				]
+			},
+			{
+				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
+				"name": "maxAge",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				]
+			},
+			{
+				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
+				"name": "maxDeviationBps",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				]
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newRate",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "updateRate"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
+				"name": "updatedAt",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				]
+			},
+			{
+				"inputs": [],
+				"stateMutability": "view",
+				"type": "function",
+				"name": "updater",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				]
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"remappings": [
+			"forge-std/=lib/forge-std/src/"
+		],
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"compilationTarget": {
+			"src/EurAoaOracle.sol": "EurAoaOracle"
+		},
+		"evmVersion": "osaka",
+		"libraries": {}
+	},
+	"sources": {
+		"src/EurAoaOracle.sol": {
+			"keccak256": "0xa3a3f457b67e2a36272b2448ab1a43277e993027650fd9010e2dece01ace877d",
+			"urls": [
+				"bzz-raw://77db509f4174f3de4ca08e4c2ab809a72f76f64a2d99e019dd5aa945782da370",
+				"dweb:/ipfs/QmVWZqBTe3V81a9BhyhCn6zt2HPPzPzuuVPNjoJX3UpnKa"
+			],
+			"license": "MIT"
+		}
+	},
+	"version": 1
+}

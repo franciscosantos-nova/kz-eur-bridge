@@ -1,0 +1,18 @@
+{
+  "test/EurAoaOracle.t.sol": {
+    "__sources__": {
+      "test/EurAoaOracle.t.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\ncontract EurAoaOracle {\r\n    uint256 private rate;\r\n    uint256 public updatedAt;\r\n    address public updater;\r\n    uint256 public maxDeviationBps;\r\n    uint256 public maxAge;\r\n\r\n    \r\n    \r\n\r\n\r\n\r\n    constructor (uint256 initialRate) {\r\n        require(initialRate > 0, \"Rate cannot be zero \");\r\n        updater = msg.sender;\r\n        maxDeviationBps = 500;\r\n        maxAge= 4 days;\r\n        rate = initialRate;\r\n        updatedAt = block.timestamp;\r\n       \r\n\r\n\r\n\r\n\r\n    }\r\n\r\n\r\n    function uptdateRate(uint256 newRate) public {\r\n        require (updater == msg.sender, \"Not Authorized\");\r\n        uint256 diff;\r\n        if (newRate > rate) {\r\n            diff= newRate - rate;\r\n        } else {\r\n            diff= rate - newRate;\r\n        }\r\n\r\n        require(diff *10000 <= rate * maxDeviationBps, \"Deviation too high\");\r\n        \r\n        rate= newRate;\r\n        updatedAt = block.timestamp;\r\n\r\n    }\r\n\r\n    function latestRate() public view returns (uint256) {\r\n\r\n        require(block.timestamp <= updatedAt + maxAge, \"Stale Rate\");\r\n        return rate;\r\n    }\r\n\r\n\r\n        \r\n    \r\n}",
+        "file": "test/EurAoaOracle.t.sol"
+      }
+    }
+  },
+  "src/EurAoaOracle.sol": {
+    "__sources__": {
+      "src/EurAoaOracle.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\ncontract EurAoaOracle {\r\n    uint256 private rate;\r\n    uint256 public updatedAt;\r\n    address public updater;\r\n    uint256 public maxDeviationBps;\r\n    uint256 public maxAge;\r\n\r\n    \r\n    \r\n\r\n\r\n\r\n    constructor (uint256 initialRate) {\r\n        require(initialRate > 0, \"Rate cannot be zero\");\r\n        updater = msg.sender;\r\n        maxDeviationBps = 500;\r\n        maxAge= 4 days;\r\n        rate = initialRate;\r\n        updatedAt = block.timestamp;\r\n       \r\n\r\n\r\n\r\n\r\n    }\r\n\r\n\r\n    function updateRate(uint256 newRate) public {\r\n        require(msg.sender == updater, \"Not authorized\");\r\n        uint256 diff;\r\n        if (newRate > rate) {\r\n            diff= newRate - rate;\r\n        } else {\r\n            diff= rate - newRate;\r\n        }\r\n\r\n        require(diff *10000 <= rate * maxDeviationBps, \"Deviation too high\");\r\n        \r\n        rate= newRate;\r\n        updatedAt = block.timestamp;\r\n\r\n    }\r\n\r\n    function latestRate() public view returns (uint256) {\r\n\r\n        require(block.timestamp <= updatedAt + maxAge, \"Stale rate\");\r\n        return rate;\r\n    }\r\n\r\n\r\n        \r\n    \r\n}",
+        "file": "src/EurAoaOracle.sol"
+      }
+    }
+  }
+}
