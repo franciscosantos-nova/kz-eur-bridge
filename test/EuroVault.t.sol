@@ -69,4 +69,25 @@ contract EuroVaultTest is Test {
         vm.expectRevert("Stale rate");
         vault.creditFromKwanza(USER, AOA_50K);
     }
+    function testFuzz_CreditKeepsVaultSolvent(uint256 aoaCents) public {
+    aoaCents = bound(aoaCents, 1, 50_000_000);
+
+    vault.creditFromKwanza(USER, aoaCents);
+
+    // ativos >= passivos
+    assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
+}
+    function testFuzz_CreditThenPayout(uint256 aoaCents, uint256 spend) public {
+    aoaCents = bound(aoaCents, 1, 50_000_000);
+    vault.creditFromKwanza(USER, aoaCents);
+
+    uint256 balanceBefore = vault.balanceOf(USER);
+    spend = bound(spend, 0, balanceBefore);                          // TODO 1
+
+    vault.payout(USER, spend, restaurant);                           // TODO 2
+
+    assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities()); // TODO 3: solvente
+    assertEq(eurc.balanceOf(restaurant), spend);                        // TODO 3: restaurante
+    assertEq(vault.balanceOf(USER), balanceBefore - spend);             // TODO 3: cliente
+}
 }
