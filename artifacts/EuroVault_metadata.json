@@ -22,6 +22,137 @@
 				"type": "constructor"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "userId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "ref",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "aoaCents",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "gross",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "net",
+						"type": "uint256"
+					}
+				],
+				"name": "KwanzaCredited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "LiquidityDeposited",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "LiquidityWithdrawn",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "userId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "ref",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "Payout",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "oldSpreadBps",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newSpreadBps",
+						"type": "uint256"
+					}
+				],
+				"name": "SpreadUpdated",
+				"type": "event"
+			},
+			{
 				"inputs": [],
 				"name": "MAX_SPREAD_BPS",
 				"outputs": [
@@ -329,11 +460,11 @@
 			]
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0x5edf830b02e7132bb0097bb35cbe2f787c6ec0c658112ba0ea371587042c00cd",
+			"keccak256": "0xa02c10dedbd8f37ffd9b67e39147375bd57830954188f4ab792c2ce5532b7938",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://388db9751988ab6023672af6c526489f52482b31cc39cb2119fa2afeda071019",
-				"dweb:/ipfs/QmeuJfqLULuLiZaVdf6FFBXVo9AfLTgYEo5kzKeHaLBL5W"
+				"bzz-raw://966ecb02f33ae73773f44a339b49c313a6a4c40005e44d2292b3dcb5ed4e05f6",
+				"dweb:/ipfs/QmYd2SoojqtkJdQXjBBGsoNEiXhPAJBGDCTvAPAd6YfSq5"
 			]
 		}
 	},

@@ -8,6 +8,99 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "userId",
+						"type": "uint256",
+						"indexed": true
+					},
+					{
+						"internalType": "bytes32",
+						"name": "ref",
+						"type": "bytes32",
+						"indexed": true
+					},
+					{
+						"internalType": "uint256",
+						"name": "aoaCents",
+						"type": "uint256",
+						"indexed": false
+					},
+					{
+						"internalType": "uint256",
+						"name": "gross",
+						"type": "uint256",
+						"indexed": false
+					},
+					{
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256",
+						"indexed": false
+					},
+					{
+						"internalType": "uint256",
+						"name": "net",
+						"type": "uint256",
+						"indexed": false
+					}
+				],
+				"type": "event",
+				"name": "KwanzaCredited",
+				"anonymous": false
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "userId",
+						"type": "uint256",
+						"indexed": true
+					},
+					{
+						"internalType": "bytes32",
+						"name": "ref",
+						"type": "bytes32",
+						"indexed": true
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address",
+						"indexed": true
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256",
+						"indexed": false
+					}
+				],
+				"type": "event",
+				"name": "Payout",
+				"anonymous": false
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "oldSpreadBps",
+						"type": "uint256",
+						"indexed": false
+					},
+					{
+						"internalType": "uint256",
+						"name": "newSpreadBps",
+						"type": "uint256",
+						"indexed": false
+					}
+				],
+				"type": "event",
+				"name": "SpreadUpdated",
+				"anonymous": false
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "string",
 						"name": "",
 						"type": "string",
@@ -647,6 +740,24 @@
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_EmitsKwanzaCredited"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_EmitsPayout"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_EmitsSpreadUpdated"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_PayoutToRestaurant"
 			},
 			{
@@ -1090,10 +1201,10 @@
 			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0x5edf830b02e7132bb0097bb35cbe2f787c6ec0c658112ba0ea371587042c00cd",
+			"keccak256": "0xa02c10dedbd8f37ffd9b67e39147375bd57830954188f4ab792c2ce5532b7938",
 			"urls": [
-				"bzz-raw://388db9751988ab6023672af6c526489f52482b31cc39cb2119fa2afeda071019",
-				"dweb:/ipfs/QmeuJfqLULuLiZaVdf6FFBXVo9AfLTgYEo5kzKeHaLBL5W"
+				"bzz-raw://966ecb02f33ae73773f44a339b49c313a6a4c40005e44d2292b3dcb5ed4e05f6",
+				"dweb:/ipfs/QmYd2SoojqtkJdQXjBBGsoNEiXhPAJBGDCTvAPAd6YfSq5"
 			],
 			"license": "MIT"
 		},
@@ -1106,10 +1217,10 @@
 			"license": "MIT"
 		},
 		"test/EuroVault.t.sol": {
-			"keccak256": "0xa79771c3573c5a0e6e017201a3fcdf1f6829aabdc88dde107398d36bd61721f4",
+			"keccak256": "0x299c0ae7d61a8004df66acd3363dc936febc4ac16663dea634ea71342df90397",
 			"urls": [
-				"bzz-raw://9c65ccc1a2c7a636f19f2c0dca1e14ee648bc67b794c780f1edc50b4d9ea8d66",
-				"dweb:/ipfs/QmVVKcm62mgU1vi43XHpThSEy2ezgpHjaXnmYYqHfqZQBR"
+				"bzz-raw://a16e3c4f9003b3c9f49b92ef221489a21a6f0d126b59ebb77a622e61d081c03a",
+				"dweb:/ipfs/QmaYJCQNdzYiEmcU2vTpLxuhS9hQvvvPPFDLhhSRLonfPT"
 			],
 			"license": "MIT"
 		}

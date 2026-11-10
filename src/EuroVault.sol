@@ -18,6 +18,16 @@ contract EuroVault {
     uint256 public totalFeesCollected;
     mapping(bytes32 => bool) public processedRefs;
 
+    // ---------- Eventos ----------
+
+    event LiquidityDeposited(address indexed from, uint256 amount);
+    event LiquidityWithdrawn(address indexed to, uint256 amount);
+    event KwanzaCredited(
+        uint256 indexed userId, bytes32 indexed ref, uint256 aoaCents, uint256 gross, uint256 fee, uint256 net
+    );
+    event Payout(uint256 indexed userId, bytes32 indexed ref, address indexed to, uint256 amount);
+    event SpreadUpdated(uint256 oldSpreadBps, uint256 newSpreadBps);
+
     constructor(address oracleAddress, address eurcAddress) {
         operator = msg.sender;
         oracle = IEurAoaOracle(oracleAddress);
@@ -30,6 +40,8 @@ contract EuroVault {
     function depositLiquidity(uint256 amount) public {
         require(msg.sender == operator, "Not authorized");
         require(eurc.transferFrom(msg.sender, address(this), amount), "Transfer failed");
+
+        emit LiquidityDeposited(msg.sender, amount);
     }
 
     function withdrawLiquidity(address to, uint256 amount) public {
@@ -38,6 +50,8 @@ contract EuroVault {
         require(amount <= availableLiquidity(), "Insufficient liquidity");
 
         require(eurc.transfer(to, amount), "Transfer failed");
+
+        emit LiquidityWithdrawn(to, amount);
     }
 
     function availableLiquidity() public view returns (uint256) {
@@ -59,7 +73,7 @@ contract EuroVault {
         require(msg.sender == operator, "Not authorized");
         _useRef(ref);
 
-        (, uint256 fee, uint256 net) = quote(aoaCents);
+        (uint256 gross, uint256 fee, uint256 net) = quote(aoaCents);
 
         require(net >= minNet, "Slippage");
         require(availableLiquidity() >= net, "Insufficient liquidity");
@@ -67,6 +81,8 @@ contract EuroVault {
         balanceOf[userId] += net;
         totalLiabilities += net;
         totalFeesCollected += fee;
+
+        emit KwanzaCredited(userId, ref, aoaCents, gross, fee, net);
     }
 
     function payout(uint256 userId, uint256 amount, address to, bytes32 ref) public {
@@ -78,6 +94,8 @@ contract EuroVault {
         totalLiabilities -= amount;
 
         require(eurc.transfer(to, amount), "Transfer failed");
+
+        emit Payout(userId, ref, to, amount);
     }
 
     // ---------- Administração ----------
@@ -85,6 +103,8 @@ contract EuroVault {
     function setSpread(uint256 newSpreadBps) public {
         require(msg.sender == operator, "Not authorized");
         require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
+
+        emit SpreadUpdated(spreadBps, newSpreadBps);
         spreadBps = newSpreadBps;
     }
 

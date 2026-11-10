@@ -224,4 +224,28 @@ contract EuroVaultTest is Test {
 
         assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
     }
+    // ---------- Eventos ----------
+
+    function test_EmitsKwanzaCredited() public {
+    vm.expectEmit(address(vault));
+    emit EuroVault.KwanzaCredited(USER, bytes32("MCX-0001"), AOA_50K, NET_50K + FEE_50K, FEE_50K, NET_50K);
+
+    vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+    }
+
+    function test_EmitsPayout() public {
+    vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+
+    vm.expectEmit(address(vault));
+    emit EuroVault.Payout(USER, bytes32("PAY-0001"), restaurant, 20e6);
+
+    vault.payout(USER, 20e6, restaurant, "PAY-0001");
+    }
+
+    function test_EmitsSpreadUpdated() public {
+    vm.expectEmit(address(vault));
+    emit EuroVault.SpreadUpdated(100, 200);
+
+    vault.setSpread(200);
+    }
 }
