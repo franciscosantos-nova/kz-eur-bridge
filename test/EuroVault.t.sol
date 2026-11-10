@@ -75,8 +75,10 @@ contract EuroVaultTest is Test {
     }
 
     function test_RevertWhen_OracleIsStale() public {
+        uint256 lastUpdate = oracle.updatedAt();
         vm.warp(block.timestamp + 4 days + 1);
-        vm.expectRevert("Stale rate");
+
+        vm.expectRevert(abi.encodeWithSelector(EurAoaOracle.StaleRate.selector, lastUpdate, 4 days));
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
     }
 
@@ -164,8 +166,10 @@ contract EuroVaultTest is Test {
     }
 
     function test_RevertedCreditDoesNotBurnRef() public {
+        uint256 lastUpdate = oracle.updatedAt();
         vm.warp(block.timestamp + 4 days + 1);
-        vm.expectRevert("Stale rate");
+
+        vm.expectRevert(abi.encodeWithSelector(EurAoaOracle.StaleRate.selector, lastUpdate, 4 days));
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
 
         oracle.updateRate(RATE);
