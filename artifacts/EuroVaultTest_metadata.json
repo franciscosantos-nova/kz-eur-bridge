@@ -9,6 +9,37 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "fromUser",
+						"type": "uint256",
+						"indexed": true
+					},
+					{
+						"internalType": "uint256",
+						"name": "toUser",
+						"type": "uint256",
+						"indexed": true
+					},
+					{
+						"internalType": "bytes32",
+						"name": "ref",
+						"type": "bytes32",
+						"indexed": true
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256",
+						"indexed": false
+					}
+				],
+				"type": "event",
+				"name": "InternalTransfer",
+				"anonymous": false
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "userId",
 						"type": "uint256",
 						"indexed": true
@@ -705,6 +736,18 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "testFuzz_TransferPreservesTotal"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
 						"name": "aoaCents",
 						"type": "uint256"
 					},
@@ -735,6 +778,12 @@
 				"stateMutability": "nonpayable",
 				"type": "function",
 				"name": "test_CreditWithExactQuote"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_EmitsInternalTransfer"
 			},
 			{
 				"inputs": [],
@@ -836,6 +885,18 @@
 				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function",
+				"name": "test_RevertWhen_TransferExceedsBalance"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_RevertWhen_TransferToSelf"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
 				"name": "test_RevertWhen_WithdrawTouchesCustomerFunds"
 			},
 			{
@@ -849,6 +910,12 @@
 				"stateMutability": "nonpayable",
 				"type": "function",
 				"name": "test_SetSpreadChangesWhatUserReceives"
+			},
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function",
+				"name": "test_TransferBetweenUsers"
 			},
 			{
 				"inputs": [],
@@ -1201,10 +1268,10 @@
 			"license": "MIT"
 		},
 		"src/EuroVault.sol": {
-			"keccak256": "0xa02c10dedbd8f37ffd9b67e39147375bd57830954188f4ab792c2ce5532b7938",
+			"keccak256": "0x41f58ece7f68c13dd794561441aa42759364e99d0af01cfd2e5a5c4f4da70059",
 			"urls": [
-				"bzz-raw://966ecb02f33ae73773f44a339b49c313a6a4c40005e44d2292b3dcb5ed4e05f6",
-				"dweb:/ipfs/QmYd2SoojqtkJdQXjBBGsoNEiXhPAJBGDCTvAPAd6YfSq5"
+				"bzz-raw://409a064738f669e043173f2d59f870b967c9e0f9947f9e4bcc986a2a5708527d",
+				"dweb:/ipfs/QmaDem1QBKs3FCJnrLTti4r29YRKdwR6rABRQ8qzrGApBZ"
 			],
 			"license": "MIT"
 		},
@@ -1217,10 +1284,10 @@
 			"license": "MIT"
 		},
 		"test/EuroVault.t.sol": {
-			"keccak256": "0x299c0ae7d61a8004df66acd3363dc936febc4ac16663dea634ea71342df90397",
+			"keccak256": "0x2c1f5ae8f20a7f369106213552129179856107720f2efc2380e2cf0bd9b48445",
 			"urls": [
-				"bzz-raw://a16e3c4f9003b3c9f49b92ef221489a21a6f0d126b59ebb77a622e61d081c03a",
-				"dweb:/ipfs/QmaYJCQNdzYiEmcU2vTpLxuhS9hQvvvPPFDLhhSRLonfPT"
+				"bzz-raw://fc3b5bdcc411f5eb94aff8871ce9bc72307d7085c6015632cff0daeded335a67",
+				"dweb:/ipfs/QmQDRGeK9SSGnn5RdAPJXyPdW6BuoCCvAB2tQH1VJCNsov"
 			],
 			"license": "MIT"
 		}

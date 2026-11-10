@@ -26,7 +26,28 @@ contract EuroVault {
         uint256 indexed userId, bytes32 indexed ref, uint256 aoaCents, uint256 gross, uint256 fee, uint256 net
     );
     event Payout(uint256 indexed userId, bytes32 indexed ref, address indexed to, uint256 amount);
+    event InternalTransfer(uint256 indexed fromUser, uint256 indexed toUser, bytes32 indexed ref, uint256 amount);
     event SpreadUpdated(uint256 oldSpreadBps, uint256 newSpreadBps);
+
+    // ---------- Erros ----------
+
+    error NotAuthorized();
+    error InvalidAddress();
+    error InvalidRef();
+    error RefAlreadyProcessed(bytes32 ref);
+    error SameUser();
+    error SpreadTooHigh(uint256 spreadBps);
+    error Slippage(uint256 net, uint256 minNet);
+    error InsufficientLiquidity(uint256 available, uint256 needed);
+    error InsufficientBalance(uint256 balance, uint256 needed);
+    error TransferFailed();
+
+    // ---------- Modifiers ----------
+
+    modifier onlyOperator() {
+        if (msg.sender != operator) revert NotAuthorized();
+        _;
+    }
 
     constructor(address oracleAddress, address eurcAddress) {
         operator = msg.sender;
@@ -37,19 +58,18 @@ contract EuroVault {
 
     // ---------- Liquidez ----------
 
-    function depositLiquidity(uint256 amount) public {
-        require(msg.sender == operator, "Not authorized");
-        require(eurc.transferFrom(msg.sender, address(this), amount), "Transfer failed");
+    function depositLiquidity(uint256 amount) public onlyOperator {
+        if (!eurc.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
 
         emit LiquidityDeposited(msg.sender, amount);
     }
 
-    function withdrawLiquidity(address to, uint256 amount) public {
-        require(msg.sender == operator, "Not authorized");
-        require(to != address(0), "Invalid address");
-        require(amount <= availableLiquidity(), "Insufficient liquidity");
+    function withdrawLiquidity(address to, uint256 amount) public onlyOperator {
+        if (to == address(0)) revert InvalidAddress();
+        uint256 available = availableLiquidity();
+        if (amount > available) revert InsufficientLiquidity(available, amount);
 
-        require(eurc.transfer(to, amount), "Transfer failed");
+        if (!eurc.transfer(to, amount)) revert TransferFailed();
 
         emit LiquidityWithdrawn(to, amount);
     }
@@ -69,14 +89,14 @@ contract EuroVault {
 
     // ---------- Operações do cliente ----------
 
-    function creditFromKwanza(uint256 userId, uint256 aoaCents, uint256 minNet, bytes32 ref) public {
-        require(msg.sender == operator, "Not authorized");
+    function creditFromKwanza(uint256 userId, uint256 aoaCents, uint256 minNet, bytes32 ref) public onlyOperator {
         _useRef(ref);
 
         (uint256 gross, uint256 fee, uint256 net) = quote(aoaCents);
 
-        require(net >= minNet, "Slippage");
-        require(availableLiquidity() >= net, "Insufficient liquidity");
+        if (net < minNet) revert Slippage(net, minNet);
+        uint256 available = availableLiquidity();
+        if (available < net) revert InsufficientLiquidity(available, net);
 
         balanceOf[userId] += net;
         totalLiabilities += net;
@@ -85,24 +105,32 @@ contract EuroVault {
         emit KwanzaCredited(userId, ref, aoaCents, gross, fee, net);
     }
 
-    function payout(uint256 userId, uint256 amount, address to, bytes32 ref) public {
-        require(msg.sender == operator, "Not authorized");
+    function payout(uint256 userId, uint256 amount, address to, bytes32 ref) public onlyOperator {
         _useRef(ref);
-        require(balanceOf[userId] >= amount, "Insufficient balance");
-
-        balanceOf[userId] -= amount;
+        _debit(userId, amount);
         totalLiabilities -= amount;
 
-        require(eurc.transfer(to, amount), "Transfer failed");
+        if (!eurc.transfer(to, amount)) revert TransferFailed();
 
         emit Payout(userId, ref, to, amount);
     }
 
+    function transferBetweenUsers(uint256 fromUser, uint256 toUser, uint256 amount, bytes32 ref)
+        public
+        onlyOperator
+    {
+        if (fromUser == toUser) revert SameUser();
+        _useRef(ref);
+        _debit(fromUser, amount);
+        balanceOf[toUser] += amount;
+
+        emit InternalTransfer(fromUser, toUser, ref, amount);
+    }
+
     // ---------- Administração ----------
 
-    function setSpread(uint256 newSpreadBps) public {
-        require(msg.sender == operator, "Not authorized");
-        require(newSpreadBps <= MAX_SPREAD_BPS, "Spread too high");
+    function setSpread(uint256 newSpreadBps) public onlyOperator {
+        if (newSpreadBps > MAX_SPREAD_BPS) revert SpreadTooHigh(newSpreadBps);
 
         emit SpreadUpdated(spreadBps, newSpreadBps);
         spreadBps = newSpreadBps;
@@ -111,8 +139,14 @@ contract EuroVault {
     // ---------- Internas ----------
 
     function _useRef(bytes32 ref) internal {
-        require(ref != bytes32(0), "Invalid ref");
-        require(!processedRefs[ref], "Ref already processed");
+        if (ref == bytes32(0)) revert InvalidRef();
+        if (processedRefs[ref]) revert RefAlreadyProcessed(ref);
         processedRefs[ref] = true;
+    }
+
+    function _debit(uint256 userId, uint256 amount) internal {
+        uint256 balance = balanceOf[userId];
+        if (balance < amount) revert InsufficientBalance(balance, amount);
+        balanceOf[userId] = balance - amount;
     }
 }

@@ -18,6 +18,7 @@ contract EuroVaultTest is Test {
     uint256 constant RATE = 106550000000;
     uint256 constant LIQUIDITY = 500e6;
     uint256 constant USER = 1;
+    uint256 constant SON = 2;
     uint256 constant AOA_50K = 5000000;
     uint256 constant NET_50K = 46457062;
     uint256 constant FEE_50K = 469263;
@@ -53,19 +54,23 @@ contract EuroVaultTest is Test {
     }
 
     function test_RevertWhen_InsufficientLiquidity() public {
-        vm.expectRevert("Insufficient liquidity");
-        vault.creditFromKwanza(USER, 1000000000, 0, "MCX-BIG");
+        uint256 aoa = 1000000000; // 10 milhões de kz
+        (,, uint256 net) = vault.quote(aoa);
+
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.InsufficientLiquidity.selector, LIQUIDITY, net));
+        vault.creditFromKwanza(USER, aoa, 0, "MCX-BIG");
     }
 
     function test_RevertWhen_PayoutExceedsBalance() public {
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
-        vm.expectRevert("Insufficient balance");
+
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.InsufficientBalance.selector, NET_50K, 100e6));
         vault.payout(USER, 100e6, restaurant, "PAY-0001");
     }
 
     function test_RevertWhen_AttackerCredits() public {
         vm.prank(attacker);
-        vm.expectRevert("Not authorized");
+        vm.expectRevert(EuroVault.NotAuthorized.selector);
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
     }
 
@@ -93,21 +98,22 @@ contract EuroVaultTest is Test {
     }
 
     function test_RevertWhen_RateMovesAgainstUser() public {
-        (,, uint256 quoted) = vault.quote(AOA_50K);   // a app mostra este valor
+        (,, uint256 quoted) = vault.quote(AOA_50K);
 
-        oracle.updateRate(RATE * 103 / 100);          // o kwanza perde 3% entretanto
+        oracle.updateRate(RATE * 103 / 100);
+        (,, uint256 netAfter) = vault.quote(AOA_50K);
 
-        vm.expectRevert("Slippage");
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.Slippage.selector, netAfter, quoted));
         vault.creditFromKwanza(USER, AOA_50K, quoted, "MCX-0001");
     }
 
     function test_CreditWhenRateMovesInUserFavour() public {
         (,, uint256 quoted) = vault.quote(AOA_50K);
 
-        oracle.updateRate(RATE * 97 / 100);           // o kwanza ganha 3%
+        oracle.updateRate(RATE * 97 / 100);
 
         vault.creditFromKwanza(USER, AOA_50K, quoted, "MCX-0001");
-        assertGt(vault.balanceOf(USER), quoted);      // recebeu mais do que lhe mostraram
+        assertGt(vault.balanceOf(USER), quoted);
     }
 
     // ---------- Margem ----------
@@ -121,13 +127,13 @@ contract EuroVaultTest is Test {
     }
 
     function test_RevertWhen_SpreadTooHigh() public {
-        vm.expectRevert("Spread too high");
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.SpreadTooHigh.selector, 501));
         vault.setSpread(501);
     }
 
     function test_RevertWhen_AttackerSetsSpread() public {
         vm.prank(attacker);
-        vm.expectRevert("Not authorized");
+        vm.expectRevert(EuroVault.NotAuthorized.selector);
         vault.setSpread(500);
     }
 
@@ -136,7 +142,7 @@ contract EuroVaultTest is Test {
     function test_RevertWhen_CreditRefReused() public {
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
 
-        vm.expectRevert("Ref already processed");
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.RefAlreadyProcessed.selector, bytes32("MCX-0001")));
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
 
         assertEq(vault.balanceOf(USER), NET_50K);
@@ -146,14 +152,14 @@ contract EuroVaultTest is Test {
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
         vault.payout(USER, 10e6, restaurant, "PAY-0001");
 
-        vm.expectRevert("Ref already processed");
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.RefAlreadyProcessed.selector, bytes32("PAY-0001")));
         vault.payout(USER, 10e6, restaurant, "PAY-0001");
 
         assertEq(eurc.balanceOf(restaurant), 10e6);
     }
 
     function test_RevertWhen_RefIsEmpty() public {
-        vm.expectRevert("Invalid ref");
+        vm.expectRevert(EuroVault.InvalidRef.selector);
         vault.creditFromKwanza(USER, AOA_50K, 0, bytes32(0));
     }
 
@@ -183,14 +189,78 @@ contract EuroVaultTest is Test {
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
         uint256 available = vault.availableLiquidity();
 
-        vm.expectRevert("Insufficient liquidity");
+        vm.expectRevert(
+            abi.encodeWithSelector(EuroVault.InsufficientLiquidity.selector, available, available + 1)
+        );
         vault.withdrawLiquidity(treasury, available + 1);
     }
 
     function test_RevertWhen_AttackerWithdraws() public {
         vm.prank(attacker);
-        vm.expectRevert("Not authorized");
+        vm.expectRevert(EuroVault.NotAuthorized.selector);
         vault.withdrawLiquidity(attacker, 1);
+    }
+
+    // ---------- Transferências entre clientes ----------
+
+    function test_TransferBetweenUsers() public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+        uint256 vaultEurcBefore = eurc.balanceOf(address(vault));
+
+        vault.transferBetweenUsers(USER, SON, 20e6, "P2P-0001");
+
+        assertEq(vault.balanceOf(USER), NET_50K - 20e6);
+        assertEq(vault.balanceOf(SON), 20e6);
+        assertEq(vault.totalLiabilities(), NET_50K);
+        assertEq(eurc.balanceOf(address(vault)), vaultEurcBefore);
+    }
+
+    function test_RevertWhen_TransferExceedsBalance() public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.InsufficientBalance.selector, NET_50K, 100e6));
+        vault.transferBetweenUsers(USER, SON, 100e6, "P2P-0001");
+    }
+
+    function test_RevertWhen_TransferToSelf() public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+
+        vm.expectRevert(EuroVault.SameUser.selector);
+        vault.transferBetweenUsers(USER, USER, 10e6, "P2P-0001");
+    }
+
+    // ---------- Eventos ----------
+
+    function test_EmitsKwanzaCredited() public {
+        vm.expectEmit(address(vault));
+        emit EuroVault.KwanzaCredited(USER, bytes32("MCX-0001"), AOA_50K, NET_50K + FEE_50K, FEE_50K, NET_50K);
+
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+    }
+
+    function test_EmitsPayout() public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+
+        vm.expectEmit(address(vault));
+        emit EuroVault.Payout(USER, bytes32("PAY-0001"), restaurant, 20e6);
+
+        vault.payout(USER, 20e6, restaurant, "PAY-0001");
+    }
+
+    function test_EmitsInternalTransfer() public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+
+        vm.expectEmit(address(vault));
+        emit EuroVault.InternalTransfer(USER, SON, bytes32("P2P-0001"), 20e6);
+
+        vault.transferBetweenUsers(USER, SON, 20e6, "P2P-0001");
+    }
+
+    function test_EmitsSpreadUpdated() public {
+        vm.expectEmit(address(vault));
+        emit EuroVault.SpreadUpdated(100, 200);
+
+        vault.setSpread(200);
     }
 
     // ---------- Fuzz ----------
@@ -224,28 +294,14 @@ contract EuroVaultTest is Test {
 
         assertGe(eurc.balanceOf(address(vault)), vault.totalLiabilities());
     }
-    // ---------- Eventos ----------
 
-    function test_EmitsKwanzaCredited() public {
-    vm.expectEmit(address(vault));
-    emit EuroVault.KwanzaCredited(USER, bytes32("MCX-0001"), AOA_50K, NET_50K + FEE_50K, FEE_50K, NET_50K);
+    function testFuzz_TransferPreservesTotal(uint256 amount) public {
+        vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
+        amount = bound(amount, 0, NET_50K);
 
-    vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
-    }
+        vault.transferBetweenUsers(USER, SON, amount, "P2P-FUZZ");
 
-    function test_EmitsPayout() public {
-    vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
-
-    vm.expectEmit(address(vault));
-    emit EuroVault.Payout(USER, bytes32("PAY-0001"), restaurant, 20e6);
-
-    vault.payout(USER, 20e6, restaurant, "PAY-0001");
-    }
-
-    function test_EmitsSpreadUpdated() public {
-    vm.expectEmit(address(vault));
-    emit EuroVault.SpreadUpdated(100, 200);
-
-    vault.setSpread(200);
+        assertEq(vault.balanceOf(USER) + vault.balanceOf(SON), NET_50K);
+        assertEq(vault.totalLiabilities(), NET_50K);
     }
 }
