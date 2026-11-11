@@ -7,8 +7,17 @@ rede/porta).
 Warning: Unable to bind to :3001 due to: [WinError 10048] Normalmente só é 
 permitido uma utilização de cada endereço de socket (protocolo/endereço de 
 rede/porta).
-Info: The fullstack will run on port 3002.
+Warning: Unable to bind to :3002 due to: [WinError 10048] Normalmente só é 
+permitido uma utilização de cada endereço de socket (protocolo/endereço de 
+rede/porta).
+Warning: Unable to bind to :3003 due to: [WinError 10048] Normalmente só é 
+permitido uma utilização de cada endereço de socket (protocolo/endereço de 
+rede/porta).
+Warning: Unable to bind to :3004 due to: [WinError 10048] Normalmente só é 
+permitido uma utilização de cada endereço de socket (protocolo/endereço de 
+rede/porta).
+Info: The fullstack will run on port 3005.
 Compiling: ---------------------------------------- 100% 18/17 0:00:00
 Creating Production Build:  ---------------------------------- 100% 4/4 0:00:01
 --------------------------------- App Running ---------------------------------
-App running at: http://0.0.0.0:3002/
+App running at: http://0.0.0.0:3005/
