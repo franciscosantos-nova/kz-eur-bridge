@@ -11,8 +11,7 @@ out/
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Docs
-docs/
+
 
 # Dotenv file
 .env
@@ -22,3 +21,14 @@ docs/
 artifacts/
 remix.config.json
 .env
+
+# App web (Reflex)
+.venv/
+__pycache__/
+.pytest_cache/
+app/.web/
+
+# PyCharm
+.idea/
+pyproject.toml
+uv.lock
