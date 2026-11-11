@@ -193,9 +193,7 @@ contract EuroVaultTest is Test {
         vault.creditFromKwanza(USER, AOA_50K, 0, "MCX-0001");
         uint256 available = vault.availableLiquidity();
 
-        vm.expectRevert(
-            abi.encodeWithSelector(EuroVault.InsufficientLiquidity.selector, available, available + 1)
-        );
+        vm.expectRevert(abi.encodeWithSelector(EuroVault.InsufficientLiquidity.selector, available, available + 1));
         vault.withdrawLiquidity(treasury, available + 1);
     }
 

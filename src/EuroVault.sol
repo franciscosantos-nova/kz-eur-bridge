@@ -59,19 +59,19 @@ contract EuroVault {
     // ---------- Liquidez ----------
 
     function depositLiquidity(uint256 amount) public onlyOperator {
-    emit LiquidityDeposited(msg.sender, amount);
+        emit LiquidityDeposited(msg.sender, amount);
 
-    if (!eurc.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
+        if (!eurc.transferFrom(msg.sender, address(this), amount)) revert TransferFailed();
     }
 
     function withdrawLiquidity(address to, uint256 amount) public onlyOperator {
-    if (to == address(0)) revert InvalidAddress();
-    uint256 available = availableLiquidity();
-    if (amount > available) revert InsufficientLiquidity(available, amount);
+        if (to == address(0)) revert InvalidAddress();
+        uint256 available = availableLiquidity();
+        if (amount > available) revert InsufficientLiquidity(available, amount);
 
-    emit LiquidityWithdrawn(to, amount);
+        emit LiquidityWithdrawn(to, amount);
 
-    if (!eurc.transfer(to, amount)) revert TransferFailed();
+        if (!eurc.transfer(to, amount)) revert TransferFailed();
     }
 
     function availableLiquidity() public view returns (uint256) {
@@ -86,7 +86,7 @@ contract EuroVault {
         // O erro de arredondamento é < 1 unidade de EURC e favorece o cliente.
         // forge-lint: disable-next-line(divide-before-multiply)
         fee = gross * spreadBps / 10000;
-        
+
         net = gross - fee;
     }
 
@@ -109,18 +109,16 @@ contract EuroVault {
     }
 
     function payout(uint256 userId, uint256 amount, address to, bytes32 ref) public onlyOperator {
-    _useRef(ref);
-    _debit(userId, amount);
-    totalLiabilities -= amount;
+        _useRef(ref);
+        _debit(userId, amount);
+        totalLiabilities -= amount;
 
-    emit Payout(userId, ref, to, amount);
+        emit Payout(userId, ref, to, amount);
 
-    if (!eurc.transfer(to, amount)) revert TransferFailed();
+        if (!eurc.transfer(to, amount)) revert TransferFailed();
     }
-    function transferBetweenUsers(uint256 fromUser, uint256 toUser, uint256 amount, bytes32 ref)
-        public
-        onlyOperator
-    {
+
+    function transferBetweenUsers(uint256 fromUser, uint256 toUser, uint256 amount, bytes32 ref) public onlyOperator {
         if (fromUser == toUser) revert SameUser();
         _useRef(ref);
         _debit(fromUser, amount);
@@ -132,13 +130,13 @@ contract EuroVault {
     // ---------- Administração ----------
 
     function setSpread(uint256 newSpreadBps) public onlyOperator {
-    if (newSpreadBps > MAX_SPREAD_BPS) revert SpreadTooHigh(newSpreadBps);
+        if (newSpreadBps > MAX_SPREAD_BPS) revert SpreadTooHigh(newSpreadBps);
 
-    uint256 oldSpreadBps = spreadBps;
-    spreadBps = newSpreadBps;
+        uint256 oldSpreadBps = spreadBps;
+        spreadBps = newSpreadBps;
 
-    emit SpreadUpdated(oldSpreadBps, newSpreadBps);
-}
+        emit SpreadUpdated(oldSpreadBps, newSpreadBps);
+    }
 
     // ---------- Internas ----------
 
