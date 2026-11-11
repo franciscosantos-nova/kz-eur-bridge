@@ -1,0 +1,14 @@
+Warning: Windows Subsystem for Linux (WSL) is recommended for improving initial
+install times.
+----------------------------- Starting Reflex App -----------------------------
+Warning: Unable to bind to :3000 due to: [WinError 10048] Normalmente só é 
+permitido uma utilização de cada endereço de socket (protocolo/endereço de 
+rede/porta).
+Warning: Unable to bind to :3001 due to: [WinError 10048] Normalmente só é 
+permitido uma utilização de cada endereço de socket (protocolo/endereço de 
+rede/porta).
+Info: The fullstack will run on port 3002.
+Compiling: ---------------------------------------- 100% 18/17 0:00:00
+Creating Production Build:  ---------------------------------- 100% 4/4 0:00:01
+--------------------------------- App Running ---------------------------------
+App running at: http://0.0.0.0:3002/
